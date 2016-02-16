@@ -1,0 +1,9 @@
+[Unit]
+Description=Aliyun DNS
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/aliyundns server 2014
+
+[Install]
+WantedBy=multi-user.target

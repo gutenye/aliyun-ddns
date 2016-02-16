@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+#
+# Usage
+#
+#   ./ake release      # build, package, and upload
+
+APP="aliyundns"
+EXTRA_FILES=""
+HOST="root@box"
+
+RELEASE="linux/amd64"
+VERSION=$(cat VERSION)
+DESTDIR=".tmp/$APP-$VERSION"
+declare -A OS_MAP=(
+	[homebrew]="darwin"
+)
+declare -A DIR_MAP=(
+	[homebrew]="/usr/share/$APP"
+)
+
+platform=""
+os=""
+arch=""
+assets_dir=""
+
+cgo_enabled() { [ "$1" == "$GOHOSTOS" ] && echo 1 || echo 0; }
+ext() { [ $1 == "windows" ] && echo .exe || echo ""; }
+
+main() {
+  go run *.go "$@"
+}
+
+release() {
+  GOROOT="/home/guten/dev/src/go/go"
+  rm *.zip *.tar.gz 2>/dev/null
+  for release in $RELEASE; do
+    platform=${release%/*}; arch=${release#*/}; os=${OS_MAP[$platform]-$platform}
+    assets_dir=${DIR_MAP[$platform]-$o_assets_dir}
+    build
+    package
+  done
+  upload *.zip *.tar.gz
+}
+
+######
+# lib
+#####
+
+get_deps() {
+  go get -v ./...
+}
+
+update-version() {
+  sed -i "s/app.Version.*/app.Version = \"$VERSION\"/" main.go
+}
+
+# dist{platform, os, arch, assets_dir}
+prepare() {
+	rm -r .tmp 2>/dev/null
+	mkdir -p $DESTDIR
+  mkdir -p dist
+
+	if [ ! -z $EXTRA_FILES ]; then
+		cp -r $EXTRA_FILES $DESTDIR
+	fi
+}
+
+# build{platform, os, arch, assets_dir}
+build() {
+  prepare
+  update-version
+
+	#rsync -a --del --exclude '.*' . /tmp/$APP/
+
+	echo -e "\nBuilding $platform/$arch"
+	#CGO_ENABLED=$(cgo_enabled $os) GOOS=$os GOARCH=$arch $GOROOT/bin/go build -o "$DESTDIR/$APP$(ext $os)"
+	GOOS=$os GOARCH=$arch $GOROOT/bin/go build -o "$DESTDIR/$APP$(ext $os)"
+
+	#rsync -a /tmp/$APP/ .
+}
+
+# package{platform, os, arch}
+package() {
+	echo "Packing $platform/$arch"
+	case $os in
+		linux | darwin ) tar zcvf dist/$APP.$platform.$arch-$VERSION.tar.gz -C .tmp $APP-$VERSION;;
+		windows ) cd .tmp && zip -r ../dist/$APP.$platform.$arch-$VERSION.zip $APP-$VERSION && cd ..  ;;
+	esac
+}
+
+upload() {
+	#for file in $*; do
+		#s3cmd put --acl-public $file s3://downloads.gutenye.com/$APP/
+		#current=$(echo $file | sed -r 's/(.*)-[0-9.]+(\..*)$/\1\2/')
+		#s3cmd copy s3://downloads.gutenye.com/$APP/$file s3://downloads.gutenye.com/$APP/$current
+	#done
+  :
+}
+
+clean() {
+  rm -r dist/*
+}
+
+deploy() {
+  platform="linux"; arch="amd64" os="linux"
+  build
+  scp misc/aliyundns.service "$HOST:/etc/systemd/system"
+  scp $DESTDIR/aliyundns "$HOST:/usr/bin"
+}
+
+############
+# main
+############
+
+eval "$(go env)"
+
+o_assets_dir="runtime"
+o_package=false
+while getopts "d:p" opt; do
+  case $opt in
+    d ) o_assets_dir=$OPTARG ;;
+		p ) o_package=true ;;
+  esac
+done
+shift $(( OPTIND - 1 ))
+
+case $1 in
+  release ) shift && release "$@" ;;
+  u | upload ) shift && upload "$@";;
+  c | clean ) shift && clean "$@" ;;
+  d | deploy) shift && deploy"$@" ;;
+  * ) main "$@";;
+esac
