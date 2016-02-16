@@ -7,6 +7,8 @@
 APP="aliyundns"
 EXTRA_FILES=""
 HOST="root@box"
+GITHUB_USER="gutenye"
+GITHUB_REPO="aliyundns"
 
 RELEASE="linux/amd64"
 VERSION=$(cat VERSION)
@@ -83,18 +85,16 @@ build() {
 package() {
 	echo "Packing $platform/$arch"
 	case $os in
-		linux | darwin ) tar zcvf dist/$APP.$platform.$arch-$VERSION.tar.gz -C .tmp $APP-$VERSION;;
+		linux | darwin ) tar jcvf dist/$APP.$platform.$arch-$VERSION.tar.bz2 -C .tmp $APP-$VERSION;;
 		windows ) cd .tmp && zip -r ../dist/$APP.$platform.$arch-$VERSION.zip $APP-$VERSION && cd ..  ;;
 	esac
 }
 
 upload() {
-	#for file in $*; do
-		#s3cmd put --acl-public $file s3://downloads.gutenye.com/$APP/
-		#current=$(echo $file | sed -r 's/(.*)-[0-9.]+(\..*)$/\1\2/')
-		#s3cmd copy s3://downloads.gutenye.com/$APP/$file s3://downloads.gutenye.com/$APP/$current
-	#done
-  :
+  github-release release --user $GITHUB_USER --repo $GITHUB_REPO --tag $VERSION
+	for file in dist/*$VERSION*; do
+    github-release upload --user $GITHUB_USER --repo $GITHUB_REPO --tag $VERSION --name ${file#*/} --file $file
+	done
 }
 
 clean() {

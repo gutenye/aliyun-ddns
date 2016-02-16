@@ -1,5 +1,5 @@
-Aliyundns, a simple cli to list and update Aliyun DNS record.
-================
+Aliyundns, Update Aliyun DNS record from OpenWRT or CLI
+======================================================
 
 [Homepage](https://github.com/gutenye/aliyundns) |
 [Documentation](https://github.com/gutenye/aliyundns/wiki) |
@@ -11,25 +11,23 @@ Aliyundns, a simple cli to list and update Aliyun DNS record.
 
 |                |                                                            |
 |----------------|------------------------------------------------------------|
-|                |  **Install**                                               |
-| ArchLinux      | `$ pacaur -S xx`                                           |
-| Manually       | `$ go get github.com/gutenye/aliyundns`             |
-
-...
+|                | **Install**                                   |
+| Binaries       | https://github.com/gutenye/aliyundns/releases |
+| Go             | `go get github.com/gutenye/aliyundns`         |
 
 Getting started
 ---------------
 
-Used in OpenWRT
+**OpenWRT Usage**
 
-Start a new server in your personal server, then use OpenWRT ddns
+Start a http server in your personal computer, then use builtin OpenWRT ddns service.
 
 ```
 $ aliyundns server 3000
 $ edit ddns custom url in OpenWRT: <server-ip>:3000/?id=12345679&rr=www&value=[IP]&access_key_id=[USERNAME]&access_key_secret=[PASSWORD]
 ```
 
-Other Usages
+**Cmdline Usage**
 
 ```
 $ edit ~/.aliyundnsrc
