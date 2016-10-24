@@ -1,9 +1,9 @@
-Aliyundns, Update Aliyun DNS record from OpenWRT or CLI
+Aliyunddns, Update Aliyun DDNS record from OpenWRT or CLI
 ======================================================
 
-[Homepage](https://github.com/gutenye/aliyundns) |
-[Documentation](https://github.com/gutenye/aliyundns/wiki) |
-[Issue Tracker](https://github.com/gutenye/aliyundns/issues) |
+[Homepage](https://github.com/gutenye/aliyun-ddns) |
+[Documentation](https://github.com/gutenye/aliyun-ddns/wiki) |
+[Issue Tracker](https://github.com/gutenye/aliyun-ddns/issues) |
 [MIT License](http://choosealicense.com/licenses/mit) |
 [by Guten](http://guten.me) |
 [Gratipay](https://gratipay.com/gutenye) |
@@ -12,34 +12,34 @@ Aliyundns, Update Aliyun DNS record from OpenWRT or CLI
 |                |                                                            |
 |----------------|------------------------------------------------------------|
 |                | **Install**                                   |
-| Binaries       | https://github.com/gutenye/aliyundns/releases |
-| Go             | `go get github.com/gutenye/aliyundns`         |
+| Binaries       | https://github.com/gutenye/aliyun-ddns/releases |
+| Go             | `go get github.com/gutenye/aliyun-ddns`         |
 
 Getting started
 ---------------
 
 **OpenWRT Usage**
 
-Start a http server in your personal computer, then use builtin OpenWRT ddns service.
+Start a http server in your personal computer, then use builtin OpenWRT dddns service.
 
 ```
-$ aliyundns server 3000
-$ edit ddns custom url in OpenWRT: <server-ip>:3000/?id=12345679&rr=www&value=[IP]&access_key_id=[USERNAME]&access_key_secret=[PASSWORD]
+$ aliyun-ddns server 3000
+$ edit dddns custom url in OpenWRT: <server-ip>:3000/?id=12345679&rr=www&value=[IP]&access_key_id=[USERNAME]&access_key_secret=[PASSWORD]
 ```
 
 **Cmdline Usage**
 
 ```
-$ edit ~/.aliyundnsrc
+$ edit ~/.aliyun-ddnsrc
 
   ACCESS_KEY_ID = "x"
   ACCESS_KEY_SECRET = "x"
 
-$ aliyundns list example.com
+$ aliyun-ddns list example.com
 
 12345678 www 1.1.1.1 example.com A
 
-$ aliyundns update 12345678 www 2.2.2.2
+$ aliyun-ddns update 12345678 www 2.2.2.2
 ```
 
 Development
@@ -49,12 +49,12 @@ Contributing
 -------------
 
 * Submit any bugs/features/ideas to github issue tracker.
-* Thanks to [all contributors](https://github.com/gutenye/aliyundns/contributors?type=a).
+* Thanks to [all contributors](https://github.com/gutenye/aliyun-ddns/contributors?type=a).
 
 Resource
 --------
 
-* [Mickyxing/aliyundns](https://github.com/Mickyxing/aliyundns), similar project, but written in Python.
+* [Mickyxing/aliyun-ddns](https://github.com/Mickyxing/aliyun-ddns), similar project, but written in Python.
 
 Copyright
 ---------
