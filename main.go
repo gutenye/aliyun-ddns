@@ -46,11 +46,14 @@ GLOBAL OPTIONS:
 			Name:  "list",
 			Usage: "<domain>",
 			Action: func(c *cli.Context) {
-				args := c.Args()
-				if len(args) < 1 {
-					shell.ErrorExit("Missing domain argument.\n\nExample:\n\n $ aliyundns list example.com")
-				}
-				List(args.Get(0))
+				pd(getIp())
+				/*
+					args := c.Args()
+					if len(args) < 1 {
+						shell.ErrorExit("Missing domain argument.\n\nExample:\n\n $ aliyundns list example.com")
+					}
+					List(args.Get(0))
+				*/
 			},
 		},
 		{

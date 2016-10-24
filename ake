@@ -124,7 +124,12 @@ while getopts "d:p" opt; do
 done
 shift $(( OPTIND - 1 ))
 
+run() {
+  go run *.go "$@"
+}
+
 case $1 in
+  run ) run "$@" ;;
   release ) shift && release "$@" ;;
   u | upload ) shift && upload "$@";;
   c | clean ) shift && clean "$@" ;;

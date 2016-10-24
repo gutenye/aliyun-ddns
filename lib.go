@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/denverdino/aliyungo/dns"
 	"github.com/gutengo/shell"
+	"net/http"
+	"regexp"
 )
 
 func List(domain string) {
@@ -29,4 +31,12 @@ func Update(recordId, rr, value string) error {
 		Type:     dns.ARecord,
 	})
 	return err
+}
+
+func getIp() string {
+	res, err := http.Get("http://pv.sohu.com/cityjson?ie=utf-8")
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+	ip := regexp.MustCompile(`\d\d\d\.\d\d\d.\d\d\d.\d\d\d`).FindString(string(body))
+	return ip
 }
