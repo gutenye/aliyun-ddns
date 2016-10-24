@@ -1,4 +1,4 @@
-Aliyunddns, Update Aliyun DDNS record from OpenWRT or CLI
+aliyun-ddns, 阿里云域名动态解析客户端
 ======================================================
 
 [Homepage](https://github.com/gutenye/aliyun-ddns) |
@@ -9,17 +9,12 @@ Aliyunddns, Update Aliyun DDNS record from OpenWRT or CLI
 [Gratipay](https://gratipay.com/gutenye) |
 [Bountysource](https://www.bountysource.com/teams/gutenye)
 
-|                |                                                            |
-|----------------|------------------------------------------------------------|
-|                | **Install**                                   |
-| Binaries       | https://github.com/gutenye/aliyun-ddns/releases |
-| Go             | `go get github.com/gutenye/aliyun-ddns`         |
+使用方法
+--------
 
-Getting started
----------------
+[下载客户端](https://github.com/gutenye/aliyun-ddns/releases)
 
-**OpenWRT Usage**
-
+### OpenWRT
 Start a http server in your personal computer, then use builtin OpenWRT dddns service.
 
 ```
@@ -27,9 +22,14 @@ $ aliyun-ddns server 3000
 $ edit dddns custom url in OpenWRT: <server-ip>:3000/?id=12345679&rr=www&value=[IP]&access_key_id=[USERNAME]&access_key_secret=[PASSWORD]
 ```
 
-**Cmdline Usage**
+### Linux
 
 ```
+# crontab -e
+
+  aliyund-ddns update example.com www -access-key-id ID -access-key-secret SECRET
+
+
 $ edit ~/.aliyun-ddnsrc
 
   ACCESS_KEY_ID = "x"
@@ -40,6 +40,13 @@ $ aliyun-ddns list example.com
 12345678 www 1.1.1.1 example.com A
 
 $ aliyun-ddns update 12345678 www 2.2.2.2
+```
+
+### Windows
+
+```
+计划任务
+aliyund-ddns update example.com www -access-key-id ID -access-key-secret SECRET
 ```
 
 Development
@@ -61,7 +68,7 @@ Copyright
 
 The MIT License
 
-Copyright (c) 2015 Guten Ye
+Copyright (c) 2015-2016 Guten Ye
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
